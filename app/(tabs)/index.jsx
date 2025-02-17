@@ -17,6 +17,11 @@ const app = () => {
           <Text style={styles.buttonText}>Contact</Text>
         </Pressable>
       </Link>
+      <Link href="/info" style={{marginHorizontal: 'auto'}} asChild>
+        <Pressable style={styles.button}>
+          <Text style={styles.buttonText}>Sharps Information</Text>
+        </Pressable>
+      </Link>
     </SafeAreaView>
   )
 }
