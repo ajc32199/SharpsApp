@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView } from 'expo-router'
 import React from 'react'
 
 const contact = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Contact Page</Text>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Text style={styles.text}>contact</Text>
+    </View>
   )
 }
 
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'black'
+      backgroundColor: 'white'
     },
     text: {
       fontSize: 20,
