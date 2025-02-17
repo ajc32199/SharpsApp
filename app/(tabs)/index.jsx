@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native'
-import { SafeAreaView } from 'expo-router'
+import { SafeAreaView } from 'react-native'
 import { Link } from 'expo-router'
 import React from 'react'
 
 const app = () => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.text}>Duluth Sharps Reporter</Text>
       <Link href="/report" style={{marginHorizontal: 'auto'}} asChild>
         <Pressable style={styles.button}>
@@ -17,7 +17,7 @@ const app = () => {
           <Text style={styles.buttonText}>Contact</Text>
         </Pressable>
       </Link>
-    </View>
+    </SafeAreaView>
   )
 }
 
