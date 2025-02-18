@@ -4,7 +4,11 @@
     "slug": "DuluthSharpsReporter",
     "version": "1.0.0",
     "orientation": "portrait",
+<<<<<<< HEAD
     "icon": "./assets/images/duluth-logo.png",
+=======
+    "icon": "./assets/images/city-logo.png",
+>>>>>>> task1-basic-outline
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
