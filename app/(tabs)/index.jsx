@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native'
 import { Link } from 'expo-router'
 import React from 'react'
 
-const app = () => {
+const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.text}>Duluth Sharps Reporter</Text>
@@ -26,14 +26,15 @@ const app = () => {
   )
 }
 
-export default app
+export default App
 
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: 'black'
+    backgroundColor: 'black',
+    justifyContent: 'center',
   },
   text: {
     color: 'white',
