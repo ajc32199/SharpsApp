@@ -6,6 +6,8 @@ const contact = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.text}>Contact Page</Text>
+      <Text style={styles.text}>Sharps Hotline:</Text>
+      <Text style={styles.text}>218-730-4001</Text>
     </SafeAreaView>
   )
 }
@@ -23,6 +25,7 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 20,
       fontWeight: 'bold',
+      textDecorationLine: 'underline',
       color: 'white',
       justifyContent: 'center',
       alignItems: 'center'

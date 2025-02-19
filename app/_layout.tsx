@@ -31,11 +31,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="index"
-          options={{ title: 'Home' }} />
-        <Stack.Screen name="report" />
         <Stack.Screen name="contact" />
-        <Stack.Screen name="information" />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
