@@ -20,8 +20,14 @@ const report = () => {
   //declare an array to hold coordinates of markers as they are created/tapped
   const [markers, setMarkers] = useState([]);
 
+  //declare an array to hold the last marker that was tapped
+  const [lastMarker, setLastMarker] = useState(null);
+
+
 
   const handleTap = (e) => {
+    //create popup alert
+    alert("Marker Created at: " + e.nativeEvent.coordinate.latitude + ", " + e.nativeEvent.coordinate.longitude);
     setMarker(e.nativeEvent.coordinate);
     //add the marker to the array of markers
     setMarkers([...markers, e.nativeEvent.coordinate]);
@@ -50,8 +56,8 @@ const report = () => {
           marker && (
             <Marker
               coordinate = {marker}
-              title="M1"
-              description="M1"
+              title={marker.latitude.toString()}
+              description={marker.longitude.toString()}
             />
           )
         }
