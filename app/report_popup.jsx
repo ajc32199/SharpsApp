@@ -1,11 +1,11 @@
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, TextInput } from 'react-native'
 import React from 'react'
 
 const report_popup = () => {
   return (
     <SafeAreaView>
       <Text style={styles.titleText}>Report Information</Text>
-      
+      <TextInput></TextInput>
     </SafeAreaView>
   )
 }
