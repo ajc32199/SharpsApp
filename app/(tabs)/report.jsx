@@ -18,8 +18,7 @@ const INTITIAL_REGION = {
 
 const report = () => {
 
-
-
+  const navigation = useNavigation();
   //declare an array to hold coordinates of markers as they are created/tapped
   const [markers, setMarkers] = useState([]);
 
@@ -39,6 +38,11 @@ const report = () => {
     console.log(markers);
   }
 
+  const handleReportPress = () => {
+    //route to report_popup
+    navigation.navigate('report_popup');
+  }
+
   const clearMarkers = () => {
     //clear the array of markers
     setMarkers([]);
@@ -54,12 +58,9 @@ const report = () => {
     
     <SafeAreaView style={styles.container}>
       <View style={styles.overlay}>
-        <TouchableOpacity style={styles.cameraButton}>
-         <Link href="/report_popup" style={{marginHorizontal: 'auto'}} asChild>
-            <Pressable style={styles.button}>
+        <TouchableOpacity style={styles.cameraButton} onPress={handleReportPress}>
               <Text style={styles.buttonText}>Report</Text>
-            </Pressable>
-          </Link>
+          
         </TouchableOpacity>
         <TouchableOpacity style={styles.clearButton} onPress={clearMarkers}>
           <Text style={styles.buttonText}>Clear</Text>
