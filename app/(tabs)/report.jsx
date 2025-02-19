@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Pressable, TouchableOpacity, Button } from 'rea
 import { SafeAreaView } from 'react-native'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import React, { useRef } from 'react'
-import { useNavigation } from 'expo-router'
+import { Link, useNavigation } from 'expo-router'
 import { useEffect } from 'react'
 import * as Location from 'expo-location'
 import { useState } from 'react'
@@ -39,6 +39,14 @@ const report = () => {
     console.log(markers);
   }
 
+  const clearMarkers = () => {
+    //clear the array of markers
+    setMarkers([]);
+    //log array of markers to console
+    console.log(markers);
+    alert("Markers Cleared!");
+  }
+
   const [marker, setMarker] = useState(null);
 
   return (
@@ -46,8 +54,15 @@ const report = () => {
     
     <SafeAreaView style={styles.container}>
       <View style={styles.overlay}>
-        <TouchableOpacity style={styles.cameraButton} onPress={() => alert("Camera button pressed!") }>
-          <Text style={styles.buttonText}>Report</Text>
+        <TouchableOpacity style={styles.cameraButton}>
+         <Link href="/report_popup" style={{marginHorizontal: 'auto'}} asChild>
+            <Pressable style={styles.button}>
+              <Text style={styles.buttonText}>Report</Text>
+            </Pressable>
+          </Link>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.clearButton} onPress={clearMarkers}>
+          <Text style={styles.buttonText}>Clear</Text>
         </TouchableOpacity>
       </View>
       <MapView
@@ -83,6 +98,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
+    backgroundColor: 'blue',
+    padding: 20,
+    borderRadius: 50,
+  },
+  button: {
+    backgroundColor: 'blue',
+  },
+  clearButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 310,
     backgroundColor: 'blue',
     padding: 20,
     borderRadius: 50,
