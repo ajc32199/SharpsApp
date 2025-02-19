@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Pressable, TouchableOpacity, Button } from 'react-native'
 import { SafeAreaView } from 'react-native'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import React, { useRef } from 'react'
@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import * as Location from 'expo-location'
 import { useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+
 
 const INTITIAL_REGION = {
   latitude: 46.788,
@@ -17,11 +18,14 @@ const INTITIAL_REGION = {
 
 const report = () => {
 
+
+
   //declare an array to hold coordinates of markers as they are created/tapped
   const [markers, setMarkers] = useState([]);
 
   //declare an array to hold the last marker that was tapped
   const [lastMarker, setLastMarker] = useState(null);
+  
 
 
 
@@ -41,17 +45,17 @@ const report = () => {
 
     
     <SafeAreaView style={styles.container}>
+      <View style={styles.overlay}>
+        <TouchableOpacity style={styles.cameraButton} onPress={() => alert("Camera button pressed!") }>
+          <Text style={styles.buttonText}>Report</Text>
+        </TouchableOpacity>
+      </View>
       <MapView
         style={styles.map}
         showsUserLocation={true}
         region={INTITIAL_REGION}
         onPress={handleTap}
         >
-        <Marker
-          coordinate={{ latitude: 46.788, longitude: -92.081 }}
-          title="Test"
-          description="Test"
-        />
         {
           marker && (
             <Marker
@@ -73,8 +77,30 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
   },
+  cameraButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: 'blue',
+    padding: 20,
+    borderRadius: 50,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    font: 'Arial',
+  },
+  overlay:
+  {
+    position: 'absolute',
+    top: 120,
+    right: -10,
+    zIndex: 1,
+    alignItems: 'flex-end',
+    padding: 20,
+  }
 })
 
