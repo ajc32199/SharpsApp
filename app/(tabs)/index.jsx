@@ -2,19 +2,15 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native'
 import { Link } from 'expo-router'
 import React from 'react'
+import { useNavigationIndependentTree } from '@react-navigation/native'
 
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Duluth Sharps Reporter</Text>
+      <Text style={styles.titletext}>Duluth Sharps Reporter</Text>
       <Link href="/report" style={{marginHorizontal: 'auto'}} asChild>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Report</Text>
-        </Pressable>
-      </Link>
-      <Link href="/contact" style={{marginHorizontal: 'auto'}} asChild>
-        <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>Contact</Text>
         </Pressable>
       </Link>
       <Link href="/info" style={{marginHorizontal: 'auto'}} asChild>
@@ -22,6 +18,12 @@ const App = () => {
           <Text style={styles.buttonText}>Sharps Information</Text>
         </Pressable>
       </Link>
+      <Link href="/contact" style={{marginHorizontal: 'auto'}} asChild>
+        <Pressable style={styles.button}>
+          <Text style={styles.buttonText}>Contact</Text>
+        </Pressable>
+      </Link>
+      
     </SafeAreaView>
   )
 }
@@ -34,6 +36,17 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: 'black',
+    justifyContent: 'center'
+  },
+  titletext: {
+    color: 'grey',
+    borderWidth: 2,
+    borderRadius: 20,
+    padding: 10,
+    borderColor: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
     justifyContent: 'center',
   },
   text: {
