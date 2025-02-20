@@ -9,13 +9,23 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "bundleIdentifier": "com.anonymous.DuluthSharpsReporter"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.DuluthSharpsReporter"
     },
     "web": {
       "bundler": "metro",
@@ -40,10 +50,24 @@
           "microphonePermission": "Allow Duluth Sharps Reporter to access your microphone",
           "recordAudioAndroid": true
         }
+      ],
+      [
+        "react-native-vision-camera",
+        {
+          "cameraPermission": "Allow Duluth Sharps Reporter to access your camera"
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "6e5b082f-a133-4237-8521-4d8dac8c26e6"
+      }
     }
   }
 }

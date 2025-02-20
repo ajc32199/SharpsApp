@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, SafeAreaView, TextInput, Button } from 'react-native'
 import { useNavigation } from 'expo-router'
 import { useState } from 'react'
+
 import React from 'react'
 
 const report_popup = () => {
@@ -8,6 +9,10 @@ const report_popup = () => {
 
   //text input for report information
   const [description, setDescription] = useState('');
+
+  const handleSubmit = () => {
+    console.log(description);
+  }
 
   return (
     <SafeAreaView>
@@ -21,11 +26,7 @@ const report_popup = () => {
         ></TextInput>
         <Button
         title="Submit"
-        onPress={() => {
-          //send data to firebase/firestore
-          //navigate back to report
-          //wipe text input
-        }} />
+        onPress={handleSubmit} />
     </SafeAreaView>
   )
 }
