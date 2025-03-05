@@ -20,7 +20,7 @@ const report_popup = () => {
       setCoodinates({lat: params.lat, long: params.long});
       console.log(params.lat, params.long);
     }
-  }, [params]);
+  }, []);
 
   const pickImage = async () => {
     //no permission request is neccesary for launching the image library
@@ -44,7 +44,8 @@ const report_popup = () => {
 
   const handleYes = () => {
     //use current location
-    console.log('yes');
+    //get the current location
+
   }
 
   const handleNo = () => {
