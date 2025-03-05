@@ -41,12 +41,10 @@ const report = () => {
   }
 
   const handleReportPress = () => {
-    //return to report.jsx
-    // router.push({
-    //   pathname: '/(tabs)/report',
-    //   params: {lat: 1, long: 2}
-    // });
-    navigation.navigate('/(tabs)/report');
+    router.push({
+      pathname: '/(tabs)/report',
+      params: {lat: 1, long: 2}
+    });
   }
 
   const clearMarkers = () => {

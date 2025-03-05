@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, SafeAreaView, TextInput, Button, Pressable } from 'react-native'
 import { useNavigation, useRoute, Link, useLocalSearchParams, useRouter } from 'expo-router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 
 import React from 'react'
@@ -18,6 +18,7 @@ const report_popup = () => {
   useEffect(() => {
     if(params?.lat && params?.long) {
       setCoodinates({lat: params.lat, long: params.long});
+      console.log(params.lat, params.long);
     }
   }, [params]);
 
