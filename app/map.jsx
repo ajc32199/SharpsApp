@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable, TouchableOpacity, Button } from 'react-native'
+import { View, Text, StyleSheet, Pressable, TouchableOpacity, Button, TextInput } from 'react-native'
 import { SafeAreaView } from 'react-native'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import React, { useRef } from 'react'
@@ -20,6 +20,7 @@ const report = () => {
 
   const navigation = useNavigation();
   const router = useRouter();
+  const [locationName, setLocationName] = useState('');
 
   //declare an array to hold coordinates of markers as they are created/tapped
   const [markers, setMarkers] = useState([]);
@@ -31,19 +32,20 @@ const report = () => {
 
 
   const handleTap = (e) => {
-    //create popup alert
-    alert("Use this Location?" 
-    + "\nLatitude: " + e.nativeEvent.coordinate.latitude
-    + "\nLongitude: " + e.nativeEvent.coordinate.longitude,
-    [
-      
-    ]
-    );
-    setMarker(e.nativeEvent.coordinate);
+
+    //check to see if a marker was clicked on 
+
+    //check if tapped location is already in the array of markers
+    if (markers.includes(e.nativeEvent.coordinate)) {
+      console.log("This location is already a favorite location!");
+      return;
+    }
+    alert("Favorite location added!");
+    const newMarker = e.nativeEvent.coordinate;
     //add the marker to the array of markers
-    setMarkers([...markers, e.nativeEvent.coordinate]);
+    setMarkers([...markers, newMarker]);
     //log array of markers to console
-    console.log(markers);
+    console.log("Markers: ", [...markers, newMarker]);
   }
 
   const handleReportPress = () => {
@@ -81,13 +83,14 @@ const report = () => {
         onPress={handleTap}
         >
         {
-          marker && (
+          markers.map((marker, index) => (
             <Marker
-              coordinate = {marker}
-              title={marker.latitude.toString()}
-              description={marker.longitude.toString()}
+              key={index}
+              coordinate={marker}
+              title={`Marker ${index + 1}`}
+              description={`This is favorite location # ${index + 1}`}
             />
-          )
+          ))
         }
       </MapView>
     </SafeAreaView>
