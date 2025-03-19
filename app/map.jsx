@@ -32,7 +32,13 @@ const report = () => {
 
   const handleTap = (e) => {
     //create popup alert
-    alert("Marker Created at: " + e.nativeEvent.coordinate.latitude + ", " + e.nativeEvent.coordinate.longitude);
+    alert("Use this Location?" 
+    + "\nLatitude: " + e.nativeEvent.coordinate.latitude
+    + "\nLongitude: " + e.nativeEvent.coordinate.longitude,
+    [
+      
+    ]
+    );
     setMarker(e.nativeEvent.coordinate);
     //add the marker to the array of markers
     setMarkers([...markers, e.nativeEvent.coordinate]);
