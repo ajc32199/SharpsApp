@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet, Pressable, TouchableOpacity, Button } from 'react-native'
+import { SafeAreaView, View, Text, StyleSheet, Alert, PermissionsAndroid, Pressable, TouchableOpacity, Button } from 'react-native'
 import { SafeAreaView } from 'react-native'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import React, { useRef } from 'react'
+import Geolocation from 'react-native-geolocation-services'
 import { useNavigation } from 'expo-router'
 import { useEffect } from 'react'
 import * as Location from 'expo-location'
@@ -48,6 +49,9 @@ const report = () => {
       <View style={styles.overlay}>
         <TouchableOpacity style={styles.cameraButton} onPress={() => alert("Camera button pressed!") }>
           <Text style={styles.buttonText}>Report</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cameraButton} onPress={() => alert("street view button pressed!") }>
+          <Text style={styles.buttonText}>Street View</Text>
         </TouchableOpacity>
       </View>
       <MapView
