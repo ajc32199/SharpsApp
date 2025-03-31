@@ -64,7 +64,7 @@ const report_popup = () => {
   return (
     <SafeAreaView>
       <Text style={styles.titleText}>Report Information</Text>
-      <Text>Use current location?</Text>
+      <Text style={styles.text}>Use current location?</Text>
       <Pressable>
         <Button
           title="Yes"
