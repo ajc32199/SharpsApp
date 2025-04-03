@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
+        fontFamily: 'RobotoCondensed',
         fontWeight: 'bold',
         color: 'white',
         justifyContent: 'center',

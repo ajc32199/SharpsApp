@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
       fontSize: 20,
       fontWeight: 'bold',
       textDecorationLine: 'underline',
+      fontFamily: 'RobotoCondensed',
       color: 'white',
       justifyContent: 'center',
       alignItems: 'center'
