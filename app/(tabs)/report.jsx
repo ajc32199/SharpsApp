@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, SafeAreaView, TextInput, Button, Pressable } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, TextInput, Button, Pressable, TouchableOpacity } from 'react-native'
 import { useNavigation, useRoute, Link, useLocalSearchParams, useRouter } from 'expo-router'
 import { useState, useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker'
@@ -62,19 +62,17 @@ const report_popup = () => {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.titleText}>Report Information</Text>
       <Text style={styles.text}>Use current location?</Text>
-      <Pressable>
-        <Button
-          title="Yes"
-          onPress={handleYes} />
-      </Pressable>
-      <Pressable>
-        <Button
-          title="No"
-          onPress={handleNo} />
-      </Pressable>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleYes}>
+            <Text style={styles.buttonText}>Yes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleNo}>
+                  <Text style={styles.buttonText}>No</Text>
+        </TouchableOpacity>
+      </View>
       <Text style={styles.text}>Enter Description of Location:</Text>
       <TextInput style={styles.textField} 
         placeholder='enter desc here'
@@ -101,27 +99,26 @@ export default report_popup
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'space-between',
         alignItems: 'stretch',
         padding: 20,
     },
     titleText: {
         color: 'white',
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: 'bold',
         top: 20,
         marginBottom: 50,
         borderRadius: 10,
         padding: 10,
-        borderColor: 'white',
-        borderWidth: 1,
-        alighSelf: 'center',
+        alignSelf: 'center',
+        fontFamily: 'RobotoCondensed',
     },
     text: {
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
+        fontFamily: 'RobotoCondensed',
     },
     textField: {
         borderColor: 'gray',
@@ -131,11 +128,25 @@ const styles = StyleSheet.create({
         padding: 10,
         color: 'white',
         height: 100,
+        fontFamily: 'RobotoCondensed',
     },
     button: {
-      flex: 1,
-        position: 'absolute',
-        bottom: 20,
-
-    }
+      backgroundColor: '#333',
+      borderRadius: 8,
+      paddingVertical: 12,
+      paddingHorizontal: 24,
+      alignItems: 'center',
+    },
+    buttonText: {
+        color: 'blue',
+        fontSize: 20,
+        fontWeight: 'bold',
+        fontFamily: 'RobotoCondensed',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 50,
+        marginBottom: 20,
+    },
 })
