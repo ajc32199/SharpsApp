@@ -63,7 +63,7 @@ const report_popup = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titleText}>Report Information</Text>
+      <Text style={styles.titleText}>Report A Sharp!</Text>
       <Text style={styles.text}>Use current location?</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleYes}>
@@ -81,15 +81,14 @@ const report_popup = () => {
         multiline
         ></TextInput>
       <Text style={styles.text}>Upload image from Camera Roll</Text>
-      <Pressable>
         <Button
           title="Choose Image"
           onPress={pickImage} />
-      </Pressable>
-        <Button
-        style={styles.button}
-        title="Submit"
-        onPress={handleSubmit} />
+      <View style={styles.submitButtonContainer}>
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+             <Text style={styles.buttonText}>Submit Report</Text>
+          </TouchableOpacity>
+      </View>
     </SafeAreaView>
   )
 }
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     buttonText: {
-        color: 'blue',
+        color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
         fontFamily: 'RobotoCondensed',
@@ -149,4 +148,17 @@ const styles = StyleSheet.create({
         gap: 50,
         marginBottom: 20,
     },
+    submitButton: {
+       backgroundColor: 'red',
+       borderRadius: 8,
+       paddingVertical: 12,
+       paddingHorizontal: 50,
+       alignItems: 'center',
+    },
+    submitButtonContainer: {
+       position: 'absolute',
+       bottom: 125,
+       left: 20,
+       right: 20,
+       },
 })
