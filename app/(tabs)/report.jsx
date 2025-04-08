@@ -1,11 +1,9 @@
-import { SafeAreaView, View, Text, StyleSheet, Alert, PermissionsAndroid, Pressable, TouchableOpacity, Button } from 'react-native'
-import { SafeAreaView } from 'react-native'
+import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity,  } from 'react-native'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import React, { useRef } from 'react'
-import Geolocation from 'react-native-geolocation-services'
+import * as Location from 'expo-location'
 import { useNavigation } from 'expo-router'
 import { useEffect } from 'react'
-import * as Location from 'expo-location'
 import { useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
