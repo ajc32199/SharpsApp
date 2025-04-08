@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
-    font: 'Arial',
+    fontFamily: 'RobotoCondensed',
   },
   overlay:
   {
