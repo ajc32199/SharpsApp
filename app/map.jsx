@@ -26,6 +26,7 @@ const report = () => {
 
   //declare an array to hold the last marker that was tapped
   const [lastMarker, setLastMarker] = useState(null);
+
   
 
 
@@ -47,9 +48,22 @@ const report = () => {
   }
 
   const handleReportPress = () => {
+    //check if there is a marker
+    if (marker === null) {
+      alert("Please select a location to report!");
+      return;
+    }
+
+    //if there is a marker, navigate to the report page with the coordinates
     router.push({
       pathname: '/(tabs)/report',
-      params: {lat: 1, long: 2}
+    });
+    router.push({
+      pathname: '/(tabs)/report',
+      params: {
+        lat: marker.latitude,
+        long: marker.longitude,
+      }
     });
   }
 

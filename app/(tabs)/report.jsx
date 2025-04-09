@@ -2,6 +2,8 @@ import { View, Text, StyleSheet, SafeAreaView, TextInput, Button, Pressable } fr
 import { useNavigation, useRoute, Link, useLocalSearchParams, useRouter } from 'expo-router'
 import { useState, useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker'
+import axios from 'axios'
+import * as Location from 'expo-location'
 
 import React from 'react'
 
@@ -16,9 +18,9 @@ const report_popup = () => {
   }
 
   useEffect(() => {
-    if(params?.lat && params?.long) {
-      setCoodinates({lat: params.lat, long: params.long});
-      console.log(params.lat, params.long);
+    if (params.lat && params.long) {
+      setLat(params.lat);
+      setLong(params.long);
     }
   }, []);
 
@@ -42,23 +44,50 @@ const report_popup = () => {
   //text input for report information
   const [description, setDescription] = useState('');
 
-  const handleYes = () => {
-    //use current location
-    //get the current location
+  const handleYes = async () => {
+    try {
+      const {status} = await Location.requestForegroundPermissionsAsync();
+      if(status !== 'granted'){
+        console.log('Permission to access location was denied');
+        return;
+      }
 
+      const location = await Location.getCurrentPositionAsync({});
+      const {latitude, longitude} = location.coords;
+
+      setCoodinates({lat: latitude, long: longitude});
+      console.log('Current location:', location.coords);
+    } catch (error){
+      console.error('Error getting location:', error);
+    }
   }
 
   const handleNo = () => {
     //goto map.jsx
     navigation.navigate('map');
   }
-  const handleSubmit = () => {
-    console.log(description);
-    //now lets log the coordinates from the map
+  const handleSubmit = async () => {
+    const reportData = {
+      latitude: coordinates?.lat || null,
+      longitude: coordinates?.long || null,
+      description
+    };
 
-    //send report information to the server
-     // go back to the map
-    navigation.navigate('index');
+    try {
+      const response = await axios.post(
+        'https://sharpsappbackend.onrender.com/reports',
+        reportData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            
+          },
+        }
+      );
+      console.log('Report submitted successfully:', response.data);
+    } catch(error) {
+      console.error('Error submitting report:', error);
+    }
   }
 
   return (
