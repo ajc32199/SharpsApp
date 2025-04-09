@@ -32,7 +32,10 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="contact" />
+        <Stack.Screen name="camera" />
+        <Stack.Screen name="map" options={{ headerShown: false}}/>
         <Stack.Screen name="+not-found" />
+        <Stack.Screen name="report" />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
