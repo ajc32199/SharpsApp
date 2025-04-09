@@ -41,6 +41,10 @@
     "expo-symbols": "~0.2.2",
     "expo-system-ui": "~4.0.8",
     "expo-web-browser": "~14.0.2",
+<<<<<<< HEAD
+=======
+    "jest": "~29.7.0",
+>>>>>>> 727051ee0db78ca12a68cfe60de601680c23176f
     "jest-expo": "~52.0.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -56,6 +60,7 @@
     "react-native-webview": "13.12.5"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@babel/core": "^7.26.10",
     "@babel/preset-env": "^7.26.9",
     "@testing-library/jest-native": "^5.4.3",
@@ -66,6 +71,15 @@
     "babel-jest": "^29.7.0",
     "eslint-plugin-testing-library": "^7.1.1",
     "jest": "^29.7.0",
+=======
+    "@babel/core": "^7.25.2",
+    "@testing-library/react-native": "^13.0.1",
+    "@types/jest": "^29.5.12",
+    "@types/react": "~18.3.12",
+    "@types/react-test-renderer": "^18.3.0",
+    "eslint-plugin-testing-library": "^7.1.1",
+    "jest": "^29.2.1",
+>>>>>>> 727051ee0db78ca12a68cfe60de601680c23176f
     "jest-expo": "~52.0.4",
     "jest-fetch-mock": "^3.0.3",
     "react-test-renderer": "18.3.1",
