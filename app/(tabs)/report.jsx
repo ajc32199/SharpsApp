@@ -1,106 +1,171 @@
-import { View, Text, StyleSheet, Pressable, TouchableOpacity, Button } from 'react-native'
-import { SafeAreaView } from 'react-native'
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
-import React, { useRef } from 'react'
-import { useNavigation } from 'expo-router'
-import { useEffect } from 'react'
-import * as Location from 'expo-location'
-import { useState } from 'react'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { View, Text, StyleSheet, SafeAreaView, TextInput, Button, Pressable } from 'react-native'
+import { useNavigation, useRoute, Link, useLocalSearchParams, useRouter } from 'expo-router'
+import { useState, useEffect } from 'react'
+import * as ImagePicker from 'expo-image-picker'
+import axios from 'axios'
 
+import React from 'react'
 
-const INTITIAL_REGION = {
-  latitude: 46.788,
-  longitude: -92.081,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
-}
+const report_popup = () => {
+  const navigation = useNavigation();
+  const [image, setImage] = useState(null);
+  const [coordinates, setCoodinates] = useState(null);
+  const params = useLocalSearchParams();
 
-const report = () => {
-
-
-
-  //declare an array to hold coordinates of markers as they are created/tapped
-  const [markers, setMarkers] = useState([]);
-
-  //declare an array to hold the last marker that was tapped
-  const [lastMarker, setLastMarker] = useState(null);
-  
-
-
-
-  const handleTap = (e) => {
-    //create popup alert
-    alert("Marker Created at: " + e.nativeEvent.coordinate.latitude + ", " + e.nativeEvent.coordinate.longitude);
-    setMarker(e.nativeEvent.coordinate);
-    //add the marker to the array of markers
-    setMarkers([...markers, e.nativeEvent.coordinate]);
-    //log array of markers to console
-    console.log(markers);
+  const checkImageInfo = (result) => {
+    console.log(result);
   }
 
-  const [marker, setMarker] = useState(null);
+  useEffect(() => {
+    if (params.lat && params.long) {
+      setLat(params.lat);
+      setLong(params.long);
+    }
+  }, []);
+
+  const pickImage = async () => {
+    //no permission request is neccesary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if(!result.cancelled && result.assets.length > 0) {
+      setImage(result.assets[0].uri);
+      console.log(result.assets[0].uri);
+    }
+  }
+
+  //text input for report information
+  const [description, setDescription] = useState('');
+
+  const handleYes = () => {
+    //get current location
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setCoodinates({ lat: latitude, long: longitude });
+        console.log(latitude, longitude);
+      },
+      (error) => {
+        console.error(error);
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
+    console.log(coordinates);
+
+  }
+
+  const handleNo = () => {
+    //goto map.jsx
+    navigation.navigate('map');
+  }
+  const handleSubmit = async () => {
+    const reportData = {
+      lat: coordinates?.lat || null,
+      long: coordinates?.long || null,
+      description
+    };
+
+    try {
+      const response = await axios.post('https://sharpsappbackend.onrender.com/reports', reportData, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reportData),
+      });
+      const data = await response.json();
+      if(response.ok){
+        console.log('Report submitted successfully:', data);
+      }else{
+        console.error('Error submitting report:', data);
+      }
+      console.log('Report submitted successfully:', response.data);
+    } catch(error) {
+      console.error('Error submitting report:', error);
+    }
+  }
 
   return (
-
-    
-    <SafeAreaView style={styles.container}>
-      <View style={styles.overlay}>
-        <TouchableOpacity style={styles.cameraButton} onPress={() => alert("Camera button pressed!") }>
-          <Text style={styles.buttonText}>Report</Text>
-        </TouchableOpacity>
-      </View>
-      <MapView
-        style={styles.map}
-        showsUserLocation={true}
-        region={INTITIAL_REGION}
-        onPress={handleTap}
-        >
-        {
-          marker && (
-            <Marker
-              coordinate = {marker}
-              title={marker.latitude.toString()}
-              description={marker.longitude.toString()}
-            />
-          )
-        }
-      </MapView>
+    <SafeAreaView>
+      <Text style={styles.titleText}>Report Information</Text>
+      <Text style={styles.text}>Use current location?</Text>
+      <Pressable>
+        <Button
+          title="Yes"
+          onPress={handleYes} />
+      </Pressable>
+      <Pressable>
+        <Button
+          title="No"
+          onPress={handleNo} />
+      </Pressable>
+      <Text style={styles.text}>Enter Description of Location:</Text>
+      <TextInput style={styles.textField} 
+        placeholder='enter desc here'
+        onChangeText={setDescription}
+        value={description}
+        multiline
+        ></TextInput>
+      <Text style={styles.text}>Upload image from Camera Roll</Text>
+      <Pressable>
+        <Button
+          title="Choose Image"
+          onPress={pickImage} />
+      </Pressable>
+        <Button
+        style={styles.button}
+        title="Submit"
+        onPress={handleSubmit} />
     </SafeAreaView>
   )
 }
 
-export default report
+export default report_popup
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    flex: 1,
-  },
-  cameraButton: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    backgroundColor: 'blue',
-    padding: 20,
-    borderRadius: 50,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-    font: 'Arial',
-  },
-  overlay:
-  {
-    position: 'absolute',
-    top: 120,
-    right: -10,
-    zIndex: 1,
-    alignItems: 'flex-end',
-    padding: 20,
-  }
-})
+    container: {
+        flex: 1,
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        padding: 20,
+    },
+    titleText: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'bold',
+        top: 20,
+        marginBottom: 50,
+        borderRadius: 10,
+        padding: 10,
+        borderColor: 'white',
+        borderWidth: 1,
+        alighSelf: 'center',
+    },
+    text: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    textField: {
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 10,
+        marginBottom: 10,
+        padding: 10,
+        color: 'white',
+        height: 100,
+    },
+    button: {
+      flex: 1,
+        position: 'absolute',
+        bottom: 20,
 
+    }
+})
