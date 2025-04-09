@@ -105,17 +105,21 @@ export default function ReportPage() {
             );
 
 
-      if (!response.ok) {
+      if (!response.status === 201) {
         throw new Error(`Request failed with status ${response.status}`);
       }
 
-      const data = await response.json();
-      console.log('Server response:', data);
+      console.log('Server response:', response.data);
 
       Alert.alert('Success', 'Your report was submitted successfully!');
 
     } catch (error) {
-      console.error('Error submitting report:', error);
+      if( error.response ) {
+        console.error('Server responded with:', error.response.status, error.response.data);
+
+      } else {
+        console.error('Error submitting report:', error.response);
+      }
       Alert.alert('Error', 'Could not submit your report.');
     }
   }
