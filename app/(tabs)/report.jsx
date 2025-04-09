@@ -75,7 +75,6 @@ const report_popup = () => {
   }
 
   const handleNo = () => {
-    //goto map.jsx
     navigation.navigate('map');
   }
   const handleSubmit = async () => {
