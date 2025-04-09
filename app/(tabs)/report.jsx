@@ -1,9 +1,21 @@
-import { View, Text, StyleSheet, SafeAreaView, TextInput, Button, Pressable } from 'react-native'
+import React, { useRef, useState, useEffect } from 'react'
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  SafeAreaView, 
+  TextInput, 
+  Button, 
+  Pressable, 
+  TouchableOpacity 
+} from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useNavigation, useRoute, Link, useLocalSearchParams, useRouter } from 'expo-router'
-import { useState, useEffect } from 'react'
 import * as ImagePicker from 'expo-image-picker'
-import axios from 'axios'
 import * as Location from 'expo-location'
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
+import axios from 'axios'
+
 
 import React from 'react'
 
@@ -91,36 +103,33 @@ const report_popup = () => {
   }
 
   return (
-    <SafeAreaView>
-      <Text style={styles.titleText}>Report Information</Text>
-      <Text style={styles.text}>Use current location?</Text>
-      <Pressable>
-        <Button
-          title="Yes"
-          onPress={handleYes} />
-      </Pressable>
-      <Pressable>
-        <Button
-          title="No"
-          onPress={handleNo} />
-      </Pressable>
-      <Text style={styles.text}>Enter Description of Location:</Text>
-      <TextInput style={styles.textField} 
-        placeholder='enter desc here'
-        onChangeText={setDescription}
-        value={description}
-        multiline
-        ></TextInput>
-      <Text style={styles.text}>Upload image from Camera Roll</Text>
-      <Pressable>
-        <Button
-          title="Choose Image"
-          onPress={pickImage} />
-      </Pressable>
-        <Button
-        style={styles.button}
-        title="Submit"
-        onPress={handleSubmit} />
+
+    
+    <SafeAreaView style={styles.container}>
+      <View style={styles.overlay}>
+        <TouchableOpacity style={styles.cameraButton} onPress={() => alert("Camera button pressed!") }>
+          <Text style={styles.buttonText}>Report</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cameraButton} onPress={() => alert("street view button pressed!") }>
+          <Text style={styles.buttonText}>Street View</Text>
+        </TouchableOpacity>
+      </View>
+      <MapView
+        style={styles.map}
+        showsUserLocation={true}
+        region={INTITIAL_REGION}
+        onPress={handleTap}
+        >
+        {
+          marker && (
+            <Marker
+              coordinate = {marker}
+              title={marker.latitude.toString()}
+              description={marker.longitude.toString()}
+            />
+          )
+        }
+      </MapView>
     </SafeAreaView>
   )
 }
