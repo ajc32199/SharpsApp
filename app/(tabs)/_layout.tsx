@@ -7,12 +7,15 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { MapProvider } from '../../utilities/mapContext'
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
+    <MapProvider>
+      <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
@@ -35,9 +38,18 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="report"
-        options={{
-          title: 'Report',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+        options={({ route }) => {
+          // If no nested route is active, default to 'index'
+          const routeName = getFocusedRouteNameFromRoute(route) ?? 'index';
+          
+          // Hide tab bar ONLY if the nested route is 'map'
+          const isMapScreen = (routeName === 'map');
+          
+          return {
+            tabBarLabel: 'Report',
+            tabBarStyle: isMapScreen ? { display: 'none' } : {},
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          };
         }}
       />
       <Tabs.Screen
@@ -54,6 +66,8 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
         }}
         />
-    </Tabs>
+      </Tabs>
+    </MapProvider>
+    
   );
 }
