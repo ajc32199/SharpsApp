@@ -23,12 +23,6 @@ const App = () => {
           <Text style={styles.buttonText}>Contact</Text>
         </Pressable>
       </Link>
-      <Link href="/report_popup" style={{marginHorizontal: 'auto'}} asChild>
-        <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>report_popup</Text>
-        </Pressable>
-      </Link>
-
       
     </SafeAreaView>
   )
@@ -42,6 +36,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: 'black',
+    justifyContent: 'center'
   },
   titletext: {
     color: 'grey',
@@ -51,8 +46,8 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: 'flex-start',
-    justifyContent: 'flex-start',
+    textAlign: 'center',
+    justifyContent: 'center',
   },
   text: {
     color: 'white',
