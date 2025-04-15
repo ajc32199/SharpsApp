@@ -1,37 +1,67 @@
-import { View, Text, StyleSheet, Pressable, SafeAreaView } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
 import React from 'react'
 
 const info = () => {
-  return (
-    <SafeAreaView style={styles.card}>
-      <Text style={styles.text}>New Disposal Method!</Text>
-      <Text style = {styles.description}>
-</Text>
-    </SafeAreaView>
-  )
-}
+  const cardsData=[
+    { id: 1, title: 'New Disposal Method!', description: 'This is the description of the first article on the info page.'},
+    { id: 2, title: 'Treatement Options', description: 'This is the description of the second article on the info page.' },
+    { id: 3, title: 'Recycling Guidelines', description:'This is the description of the third article on the info page.', },
+    { id: 4, title: 'Environmental Impact', description:'This is the description of the fourth article on the info page.' },
+  ];
 
-export default info
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {cardsData.map((card) => (
+          <View key={card.id} style={styles.cardContainer}>
+           <View style = {styles.card}>
+            <Text style={styles.title}>{card.title}</Text>
+            <Text style={styles.description}>{card.description}</Text>
+          </View>
+          </View>
+        ))}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default info;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: 'black'
+    },
+    scrollViewContent: {
+      padding: 16,
+    },
+    cardContainer: {
+        marginBottom: 16,
+        borderColor: 'grey',
+        borderWidth: 1,
+        borderRadius: 8,
     },
     card: {
         borderRadius: 8,
         padding: 16,
         marginalVertical: 8,
-        elevation: 5
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
     },
-    text: {
+    title: {
         fontSize: 20,
         fontFamily: 'RobotoCondensed',
         fontWeight: 'bold',
         color: 'white',
-        justifyContent: 'center',
-        alignItems: 'center'
+        marginBottom: 8,
+    },
+    description: {
+      fontSize: 16,
+      fontFamily: 'RobotoCondensed',
+      color: '#666',
+      lineHeight: 24,
     }
-})
+});
