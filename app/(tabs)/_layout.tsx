@@ -13,7 +13,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-      'RobotoCondensed': require ('../../assets/fonts/RobotoCondensed.ttf'),
+      'RobotoCondensedReg': require ('../../assets/fonts/RobotoCondensedReg.ttf'),
     });
 
   return (

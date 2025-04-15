@@ -44,16 +44,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   titletext: {
-    color: 'grey',
+    color: 'white',
     borderWidth: 2,
     borderRadius: 20,
     padding: 10,
-    borderColor: 'white',
     fontSize: 20,
-    fontFamily: 'RobotoCondensed',
+    fontFamily: 'Roboto_Condensed-Bold',
     fontWeight: 'bold',
-    textAlign: 'flex-start',
-    justifyContent: 'flex-start',
+    alignSelf: 'center',
   },
   text: {
     color: 'white',
@@ -92,8 +90,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 20,
-    fontWeight: 'bold',
-    fontFamily: 'RobotoCondensed',
+    fontFamily: 'RobotoCondensedReg',
     textAlign: 'center',
     justifyContent: 'center',
   }
