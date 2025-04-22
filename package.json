@@ -11,15 +11,6 @@
     "test": "jest",
     "lint": "expo lint"
   },
-  "jest": {
-    "preset": "jest-expo",
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-native/extend-expect"
-    ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!(@react-native|react-native|expo(nent)?|@expo(nent)?|@unimodules|expo-modules-core)/)"
-    ]
-  },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
     "@react-navigation/bottom-tabs": "^7.2.0",
