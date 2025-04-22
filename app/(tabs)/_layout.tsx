@@ -1,6 +1,8 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
+import { useFonts } from 'expo-font';
+import { Text } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
@@ -12,6 +14,9 @@ import { MapProvider } from '../../utilities/mapContext'
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const [loaded] = useFonts({
+      'RobotoCondensedReg': require ('../../assets/fonts/RobotoCondensedReg.ttf'),
+    });
 
   return (
     <MapProvider>
@@ -34,22 +39,33 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarLabel: ({ focused }) => (
+            <Text
+              style = {{
+                fontFamily: 'RobotoCondensed',
+                fontSize: 12,
+                color: focused ? Colors[colorScheme ?? 'light'].tint : 'gray',
+                }}>
+                Home
+            </Text>
+          ),
         }}
       />
       <Tabs.Screen
         name="report"
-        options={({ route }) => {
-          // If no nested route is active, default to 'index'
-          const routeName = getFocusedRouteNameFromRoute(route) ?? 'index';
-          
-          // Hide tab bar ONLY if the nested route is 'map'
-          const isMapScreen = (routeName === 'map');
-          
-          return {
-            tabBarLabel: 'Report',
-            tabBarStyle: isMapScreen ? { display: 'none' } : {},
-            tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-          };
+        options={{
+          title: 'Report',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarLabel: ({ focused }) => (
+            <Text
+              style = {{
+                fontFamily: 'RobotoCondensed',
+                fontSize: 12,
+                color: focused ? Colors[colorScheme ?? 'light'].tint : 'gray',
+                }}>
+                Report
+            </Text>
+          ),
         }}
       />
       <Tabs.Screen
@@ -57,17 +73,37 @@ export default function TabLayout() {
         options={{
           title: 'Info',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="book.fill" color={color} />,
-        }}
+          tabBarLabel: ({ focused }) => (
+            <Text
+              style = {{
+                fontFamily: 'RobotoCondensed',
+                fontSize: 12,
+                color: focused ? Colors[colorScheme ?? 'light'].tint : 'gray',
+                }}>
+                Info
+              </Text>
+            ),
+          }}
         />
       <Tabs.Screen
         name="contact"
         options={{
           title: 'Contact',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
-        }}
+          tabBarLabel: ({ focused }) => (
+            <Text
+              style = {{
+                fontFamily: 'RobotoCondensed',
+                fontSize: 12,
+                color: focused ? Colors[colorScheme ?? 'light'].tint : 'gray',
+                }}>
+                Contact
+              </Text>
+            ),
+          }}
         />
       </Tabs>
     </MapProvider>
-    
+
   );
 }

@@ -27,10 +27,8 @@ export default function ReportPage() {
   const router = useRouter();
   const { lat, lng } = useLocalSearchParams();
 
-  // 2) Destructure location/setLocation from context
   const { location, setLocation } = useMap();
 
-  // Keep the rest of your local states
   const [locationDescription, setLocationDescription] = useState('');
   const [photoUri, setPhotoUri] = useState(null);
 
@@ -41,7 +39,6 @@ export default function ReportPage() {
     longitudeDelta: 0.04,
   });
 
-  // For “mini map” marker
   const [userMarker, setUserMarker] = useState(null);
 
   useEffect(() => {
@@ -57,7 +54,6 @@ export default function ReportPage() {
       }));
     }
   }, [location]);
-  // If lat/lng were passed via route params, set local marker + context
   useEffect(() => {
     if (lat && lng) {
       const latitude = parseFloat(lat);
@@ -69,10 +65,28 @@ export default function ReportPage() {
         latitude,
         longitude,
       }));
-      // 3) Also sync to global context
       setLocation({ latitude, longitude });
     }
   }, [lat, lng]);
+
+  const cloudinaryUpload = async (photoUri, reportId) => {
+    const formData = new FormData();
+    formData.append('file', {
+      uri: photoUri,
+      type: 'image/jpeg', 
+      name: `report_${reportId}.jpg`,
+    });
+  
+    formData.append('upload_preset', 'SharpsAppPreset');
+  
+    const response = await axios.post(
+      'https://api.cloudinary.com/v1_1/dl2m2trsq/image/upload',
+      formData,
+      { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
+  
+    return response.data.secure_url; 
+  };
 
   async function handleSubmitReport() {
     try {
@@ -110,8 +124,14 @@ export default function ReportPage() {
       }
 
       console.log('Server response:', response.data);
+      const { id: reportId } = response.data;
+
+
+      cloudinaryUpload(photoUri, reportId);
 
       Alert.alert('Success', 'Your report was submitted successfully!');
+
+      router.push('/(tabs)')
 
     } catch (error) {
       if( error.response ) {
@@ -140,7 +160,6 @@ export default function ReportPage() {
         latitude,
         longitude,
       }));
-      // 4) Also sync global location
       setLocation({ latitude, longitude });
     } catch (err) {
       console.log(err);
@@ -153,7 +172,6 @@ export default function ReportPage() {
     router.push('/(tabs)/report/map');
   }
 
-  // Photo from gallery
   async function handlePickPhoto() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -212,7 +230,7 @@ export default function ReportPage() {
                   onRegionChangeComplete={(newRegion) => setMapRegion(newRegion)}
                   pointerEvents="none"
                 >
-                  {/* 5) Show the userMarker or the global location—whatever you prefer */}
+                  {/* Show the userMarker or the global location—whatever you prefer */}
                   {location && (
                     <Marker coordinate={location} title="Your Location" />
                   )}

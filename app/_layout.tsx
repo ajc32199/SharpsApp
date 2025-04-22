@@ -14,7 +14,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    RobotoCondensedReg: require ('../assets/fonts/RobotoCondensedReg.ttf'),
   });
 
   useEffect(() => {
