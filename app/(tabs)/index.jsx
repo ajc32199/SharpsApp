@@ -39,21 +39,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   titletext: {
-    color: 'grey',
+    color: 'white',
     borderWidth: 2,
     borderRadius: 20,
     padding: 10,
-    borderColor: 'white',
     fontSize: 20,
+    fontFamily: 'Roboto_Condensed-Bold',
     fontWeight: 'bold',
-    textAlign: 'center',
-    justifyContent: 'center',
+    alignSelf: 'center',
   },
   text: {
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'RobotoCondensed',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
     marginBottom: 10,
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'RobotoCondensed',
     textDecorationLine: 'underline',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'RobotoCondensedReg',
     textAlign: 'center',
     justifyContent: 'center',
   }
