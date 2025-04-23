@@ -1,12 +1,25 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Pressable, TouchableOpacity, Linking } from 'react-native'
 import { SafeAreaView } from 'react-native'
 import React from 'react'
 
 const contact = () => {
+  const handleCallPress = async () => {
+    const phoneNumber = '218-730-4001'
+    const url = 'tel:218-730-4001'
+
+    const supported = await Linking.canOpenURL(url)
+
+    if(supported) {
+    await Linking.openURL(url)
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.text}>Sharps Hotline:</Text>
-      <Text style={styles.text}>218-730-4001</Text>
+      <TouchableOpacity onPress = {handleCallPress}>
+        <Text style={[styles.text, styles.phoneNumber]}>218-730-4001</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }
@@ -28,5 +41,10 @@ const styles = StyleSheet.create({
       color: 'white',
       justifyContent: 'center',
       alignItems: 'center'
-    }
+    },
+    phoneNumber: {
+      color: '#007BFF',
+      fontFamily: 'RobotoCondensed',
+      textDecorationLine: 'underline',
+    },
   })
