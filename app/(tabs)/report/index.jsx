@@ -179,7 +179,7 @@ export default function ReportPage() {
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaType.Images,
       allowsEditing: true,
       quality: 1,
     });
@@ -305,6 +305,8 @@ const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 16, paddingTop: 10, backgroundColor: '#000' },
   sectionLabel: { fontSize: 16, fontWeight: '600', color: '#fff', marginTop: 16 },
   sectionDescription: { fontSize: 14, color: '#ccc', marginVertical: 6 },
+  scrollContainer: { flex: 1, },
+  scrollContent: { paddingBottom: 100 },
   textInput: {
     backgroundColor: '#1a1a1a',
     color: '#fff',
