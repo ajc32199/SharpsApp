@@ -73,19 +73,19 @@ export default function ReportPage() {
     const formData = new FormData();
     formData.append('file', {
       uri: photoUri,
-      type: 'image/jpeg', 
+      type: 'image/jpeg',
       name: `report_${reportId}.jpg`,
     });
-  
+
     formData.append('upload_preset', 'SharpsAppPreset');
-  
+
     const response = await axios.post(
       'https://api.cloudinary.com/v1_1/dl2m2trsq/image/upload',
       formData,
       { headers: { 'Content-Type': 'multipart/form-data' } }
     );
-  
-    return response.data.secure_url; 
+
+    return response.data.secure_url;
   };
 
   async function handleSubmitReport() {
@@ -108,15 +108,15 @@ export default function ReportPage() {
       console.log('Sending report payload:', payload);
 
       const response = await axios.post(
-              'https://sharpsappbackend.onrender.com/reports',
-              payload,
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                  
-                },
-              }
-            );
+        'https://sharpsappbackend.onrender.com/reports',
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+
+          },
+        }
+      );
 
 
       if (!response.status === 201) {
@@ -134,7 +134,7 @@ export default function ReportPage() {
       router.push('/(tabs)')
 
     } catch (error) {
-      if( error.response ) {
+      if (error.response) {
         console.error('Server responded with:', error.response.status, error.response.data);
 
       } else {
@@ -167,7 +167,6 @@ export default function ReportPage() {
     }
   }
 
-  // "Pick on Map"
   function handleSelectOnMap() {
     router.push('/(tabs)/report/map');
   }
@@ -175,19 +174,31 @@ export default function ReportPage() {
   async function handlePickPhoto() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission Required', 'Need camera roll permission to select photos.');
+      Alert.alert(
+        'Permission Required',
+        'We need access to your photos to let you pick one.'
+      );
       return;
     }
+  
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaType.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       quality: 1,
     });
-    if (!result.canceled) {
-      setPhotoUri(result.assets[0].uri);
+  
+    console.log('ImagePicker result:', result);
+  
+    const didCancel = result.canceled ?? result.cancelled;   
+    if (!didCancel) {
+      const uri =
+        Array.isArray(result.assets) && result.assets.length > 0
+          ? result.assets[0].uri
+          : result.uri;
+      setPhotoUri(uri);
     }
   }
-
+  
   // Photo from camera
   async function handleTakePhoto() {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -261,15 +272,27 @@ export default function ReportPage() {
               <Text style={styles.sectionLabel}>Photo (optional)</Text>
               <Text style={styles.sectionDescription}>
                 {!photoUri ? (
-                  "Take a quick photo or choose one from your library:" 
+                  "Take a quick photo or choose one from your library:"
                 ) : (
                   "Very nice!"
                 )
                 }
-                
-              </Text>
-              {photoUri && <Image source={{ uri: photoUri }} style={styles.photoPreview} />}
 
+              </Text>
+              {photoUri && (
+                <View style={styles.photoContainer}>
+                  <Image
+                    source={{ uri: photoUri }}
+                    style={styles.photoPreview}
+                  />
+                  <TouchableOpacity
+                    style={styles.clearButton}
+                    onPress={() => setPhotoUri(null)}
+                  >
+                    <Text style={styles.clearButtonText}>✕</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
               <View style={styles.buttonRow}>
                 <TouchableOpacity style={styles.choiceButton} onPress={handlePickPhoto}>
                   <Text style={styles.choiceText}>Select from Gallery</Text>
@@ -279,7 +302,7 @@ export default function ReportPage() {
                 </TouchableOpacity>
               </View>
 
-              
+
 
 
               {/* Submit Button */}
@@ -293,7 +316,7 @@ export default function ReportPage() {
             </View>
 
           </TouchableWithoutFeedback>
-          
+
         </ScrollView>
 
       </KeyboardAvoidingView>
@@ -306,7 +329,7 @@ const styles = StyleSheet.create({
   sectionLabel: { fontSize: 16, fontWeight: '600', color: '#fff', marginTop: 16 },
   sectionDescription: { fontSize: 14, color: '#ccc', marginVertical: 6 },
   scrollContainer: { flex: 1, },
-  scrollContent: { paddingBottom: 100 },
+  scrollContent: { paddingBottom: 100, paddingRight: 20},
   textInput: {
     backgroundColor: '#1a1a1a',
     color: '#fff',
@@ -321,7 +344,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     marginTop: 8,
-    marginBottom: 10,
   },
   mapPreview: { width: '100%', height: '100%' },
   buttonRow: { flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 },
@@ -334,12 +356,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   choiceText: { color: '#fff', fontWeight: '600' },
+  photoContainer: {
+    position: 'relative',
+    alignSelf: 'stretch',
+    marginTop: 8,
+  },
   photoPreview: {
     width: '100%',
     height: 200,
     borderRadius: 10,
-    marginTop: 10,
     resizeMode: 'cover',
+  },
+  clearButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  clearButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    lineHeight: 12,
   },
   submitButton: {
     backgroundColor: 'orange',
