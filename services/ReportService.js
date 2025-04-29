@@ -30,9 +30,9 @@ export const ReportService = {
     }
   },
 
-  async updateReportStatus(id, status) {
+  async updateReportStatus(id, reportStatus) {
     try {
-      const response = await instance.patch(`/reports/${id}`, { status });
+      const response = await instance.patch(`/reports/${id}`, { reportStatus });
       return response.data;
     } catch (error) {
       console.error('Failed to update report status:', error);
