@@ -28,9 +28,9 @@ const styles = StyleSheet.create({
   link: {
     marginTop: 15,
     paddingVertical: 15,
-    fontFamily: 'RobotoCondensed',
+    fontFamily: 'RobotoCondensedReg',
   },
   title: {
-    fontFamily: 'RobotoCondensed',
+    fontFamily: 'RobotoCondensedReg',
   },
 });

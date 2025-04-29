@@ -303,8 +303,8 @@ export default function ReportPage() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 16, paddingTop: 10, backgroundColor: '#000' },
-  sectionLabel: { fontSize: 16, fontWeight: '600', color: '#fff', marginTop: 16 },
-  sectionDescription: { fontSize: 14, color: '#ccc', marginVertical: 6 },
+  sectionLabel: { fontSize: 16, fontWeight: '600', color: '#fff', marginTop: 16, fontFamily: 'Roboto_Condensed-Bold' },
+  sectionDescription: { fontSize: 16, color: '#ccc', marginVertical: 6, fontFamily: 'RobotoCondensedReg' },
   textInput: {
     backgroundColor: '#1a1a1a',
     color: '#fff',
@@ -312,6 +312,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     marginBottom: 16,
+    fontFamily: 'RobotoCondensedReg',
   },
   mapWindow: {
     width: '100%',
@@ -331,7 +332,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
-  choiceText: { color: '#fff', fontWeight: '600' },
+  choiceText: { color: '#fff', fontWeight: '600', fontFamily: 'Roboto_Condensed-Bold' },
   photoPreview: {
     width: '100%',
     height: 200,
@@ -350,5 +351,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: 'Roboto_Condensed-Bold',
   },
 });

@@ -10,6 +10,11 @@ const info = () => {
   ];
 
   return (
+    <>
+      <View style = {styles.header}>
+        <Text style={styles.headerTitle}>Duluth Sharp Spot</Text>
+      </View>
+
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {cardsData.map((card) => (
@@ -22,6 +27,7 @@ const info = () => {
         ))}
       </ScrollView>
     </SafeAreaView>
+   </>
   );
 };
 
@@ -31,6 +37,23 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'black'
+    },
+    header: {
+      height: 100,
+      paddingTop: 57,
+      backgroundColor: 'white',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderBottomWidth: 1,
+      fontFamily: 'Roboto_Condensed-Bold',
+    },
+    headerTitle: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderBottomWidth: 1,
+      borderBottomColor: 'white',
+      fontFamily: 'Roboto_Condensed-Bold',
+      fontWeight: 'bold',
     },
     scrollViewContent: {
       padding: 16,
@@ -53,14 +76,14 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 20,
-        fontFamily: 'RobotoCondensed',
+        fontFamily: 'Roboto_Condensed-Bold',
         fontWeight: 'bold',
         color: 'white',
         marginBottom: 8,
     },
     description: {
       fontSize: 16,
-      fontFamily: 'RobotoCondensed',
+      fontFamily: 'RobotoCondensedReg',
       color: '#666',
       lineHeight: 24,
     }

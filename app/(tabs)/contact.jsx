@@ -85,25 +85,25 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 20,
-        fontFamily: 'RobotoCondensed',
+        fontFamily: 'Roboto_Condensed-Bold',
         fontWeight: 'bold',
         color: 'white',
         marginBottom: 8,
     },
     description: {
       fontSize: 16,
-      fontFamily: 'RobotoCondensed',
+      fontFamily: 'RobotoCondensedReg',
       color: '#666',
       lineHeight: 24,
     },
     phoneNumber: {
       color: '#007BFF',
-      fontFamily: 'RobotoCondensed',
+      fontFamily: 'RobotoCondensedReg',
       textDecorationLine: 'underline',
     },
     websiteLink: {
       color: '#007BFF',
-      fontFamily: 'RobotoCondensed',
+      fontFamily: 'RobotoCondensedReg',
       textDecorationLine: 'underline',
     },
   })
