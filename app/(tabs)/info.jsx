@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native'
 import React from 'react'
+import { useTheme } from '@react-navigation/native';
 
 const info = () => {
   const cardsData=[
@@ -9,10 +10,12 @@ const info = () => {
     { id: 4, title: 'Environmental Impact', description:'This is the description of the fourth article on the info page.' },
   ];
 
+  const { colors } = useTheme();
+
   return (
     <>
-      <View style = {styles.header}>
-        <Text style={styles.headerTitle}>Duluth Sharp Spot</Text>
+      <View style = {[styles.header, { backgroundColor: colors.background }]}>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>Duluth Sharp Spot</Text>
       </View>
 
     <SafeAreaView style={styles.container}>
@@ -41,7 +44,6 @@ const styles = StyleSheet.create({
     header: {
       height: 100,
       paddingTop: 57,
-      backgroundColor: 'white',
       justifyContent: 'center',
       alignItems: 'center',
       borderBottomWidth: 1,
@@ -51,7 +53,6 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       borderBottomWidth: 1,
-      borderBottomColor: 'white',
       fontFamily: 'Roboto_Condensed-Bold',
       fontWeight: 'bold',
     },

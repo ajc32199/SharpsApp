@@ -1,6 +1,7 @@
 import { ScrollView, View, Text, StyleSheet, Pressable, TouchableOpacity, Linking } from 'react-native'
 import { SafeAreaView } from 'react-native'
 import React from 'react'
+import { useTheme } from '@react-navigation/native';
 
 const contact = () => {
   const cardsData=[
@@ -26,7 +27,14 @@ const contact = () => {
     }
   }
 
+  const { colors } = useTheme();
+
   return (
+    <>
+      <View style = {[styles.header, { backgroundColor: colors.background }]}>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>Duluth Sharp Spot</Text>
+      </View>
+
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         {cardsData.map((card) => (
@@ -51,6 +59,7 @@ const contact = () => {
         ))}
       </ScrollView>
     </SafeAreaView>
+    </>
   )
 }
 
@@ -63,6 +72,21 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: 'black'
+    },
+    header: {
+      height: 100,
+      paddingTop: 57,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderBottomWidth: 1,
+      fontFamily: 'Roboto_Condensed-Bold',
+    },
+    headerTitle: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderBottomWidth: 1,
+      fontFamily: 'Roboto_Condensed-Bold',
+      fontWeight: 'bold',
     },
     scrollViewContent: {
       padding: 16,
