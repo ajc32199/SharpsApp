@@ -7,7 +7,7 @@ import { useNavigationIndependentTree } from '@react-navigation/native'
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titletext}>Duluth Sharps Reporter</Text>
+      <Text style={styles.titletext}>Duluth Sharp Spot</Text>
       <Link href="/report" style={{marginHorizontal: 'auto'}} asChild>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Report</Text>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    fontFamily: 'RobotoCondensed',
+    fontFamily: 'RobotoCondensedReg',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
     marginBottom: 10,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    fontFamily: 'RobotoCondensed',
+    fontFamily: 'RobotoCondensedReg',
     textDecorationLine: 'underline',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',

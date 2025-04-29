@@ -10,7 +10,13 @@ export default function ReportLayout() {
       */}
       <Stack.Screen 
         name="index"
-        options={{ title: 'Report' }} 
+        options={{
+        title: 'Duluth Sharp Spot',
+         headerTitleStyle: {
+            fontFamily: 'Roboto_Condensed-Bold',
+            fontWeight: 'bold',
+         },
+         }}
       />
 
       {/*
