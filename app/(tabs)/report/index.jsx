@@ -378,6 +378,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 8,
     marginBottom: 16,
+    fontFamily: 'RobotoCondensedReg',
   },
   mapWindow: {
     width: '100%',
@@ -435,5 +436,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: 'Roboto_Condensed-Bold',
   },
 });

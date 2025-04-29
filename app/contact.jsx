@@ -26,6 +26,6 @@ const styles = StyleSheet.create({
       color: 'white',
       justifyContent: 'center',
       alignItems: 'center',
-      fontFamily: 'RobotoCondensed'
+      fontFamily: 'RobotoCondensedReg'
     }
   })
