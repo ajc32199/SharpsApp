@@ -12,14 +12,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ActivityIndicator
 } from 'react-native';
-
+import { ReportService } from '@/services/ReportService';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
-
-import axios from 'axios'
 
 import { useMap } from '@/utilities/mapContext';
 
@@ -31,6 +30,7 @@ export default function ReportPage() {
 
   const [locationDescription, setLocationDescription] = useState('');
   const [photoUri, setPhotoUri] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [mapRegion, setMapRegion] = useState({
     latitude: 46.788,
@@ -69,26 +69,48 @@ export default function ReportPage() {
     }
   }, [lat, lng]);
 
-  const cloudinaryUpload = async (photoUri, reportId) => {
-    const formData = new FormData();
-    formData.append('file', {
-      uri: photoUri,
-      type: 'image/jpeg',
-      name: `report_${reportId}.jpg`,
-    });
-
-    formData.append('upload_preset', 'SharpsAppPreset');
-
-    const response = await axios.post(
-      'https://api.cloudinary.com/v1_1/dl2m2trsq/image/upload',
-      formData,
-      { headers: { 'Content-Type': 'multipart/form-data' } }
-    );
-
-    return response.data.secure_url;
+  const buildCloudinaryUrl = (cloudName, publicId, format = "png") => {
+    return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.${format}`;
   };
 
-  async function handleSubmitReport() {
+  const cloudinaryUpload = async (photoUri, reportId) => {
+    try {
+      const cloudName = "dl2m2trsq";
+      const uploadPreset = "SharpsAppPreset";
+
+      const formData = new FormData();
+      formData.append('file', {
+        uri: photoUri,
+        type: 'image/jpeg',
+        name: `report_${reportId}.jpg`,
+      });
+
+      formData.append('upload_preset', uploadPreset);
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+        { method: 'POST', body: formData }
+      );
+      const data = await response.json();          // { secure_url, public_id, … }
+
+      console.log('Upload response:', data);
+
+      const cloudinaryUrl = data.secure_url
+        // Fallback if secure_url not present
+        || buildCloudinaryUrl(cloudName, data.public_id, data.format);
+
+      // Update your local state with the final Cloudinary URL
+      setPhotoUri(cloudinaryUrl);
+
+      console.log('Cloudinary URL:', data.secure_url);
+      return cloudinaryUrl;
+    } catch (err) {
+      console.warn('Upload failed:', err);
+    }
+  };
+
+  const handleSubmitReport = async () => {
+    setLoading(true);
     try {
       if (!location) {
         Alert.alert('Ack!', 'Please select a location, then try again.');
@@ -105,44 +127,35 @@ export default function ReportPage() {
         description: locationDescription || ''
       };
 
-      console.log('Sending report payload:', payload);
+      const report = await ReportService.createReport(payload);
 
-      const response = await axios.post(
-        'https://sharpsappbackend.onrender.com/reports',
-        payload,
-        {
-          headers: {
-            'Content-Type': 'application/json',
+      console.log('Server created report:', report);
 
-          },
-        }
-      );
+      const { id: reportId } = report;
 
+      const uploadedPhotoUrl = await cloudinaryUpload(photoUri, reportId);
 
-      if (!response.status === 201) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
+      console.log('Uploaded photo URL:', uploadedPhotoUrl);
 
-      console.log('Server response:', response.data);
-      const { id: reportId } = response.data;
+      const updatedReport = await ReportService.updateReportPhotoUrl(reportId, uploadedPhotoUrl);
 
-
-      cloudinaryUpload(photoUri, reportId);
+      console.log('Server updated report with photo:', updatedReport);
 
       Alert.alert('Success', 'Your report was submitted successfully!');
-
-      router.push('/(tabs)')
+      router.push('/(tabs)');
 
     } catch (error) {
       if (error.response) {
+        console.log('Server responded with:', error.response.status, error.response.data);
         console.error('Server responded with:', error.response.status, error.response.data);
-
       } else {
-        console.error('Error submitting report:', error.response);
+        console.log('Error submitting report:', error);
+        console.error('Error submitting report:', error);
       }
       Alert.alert('Error', 'Could not submit your report.');
     }
-  }
+    setLoading(false);
+  };
 
   async function handleUseCurrentLocation() {
     try {
@@ -180,16 +193,16 @@ export default function ReportPage() {
       );
       return;
     }
-  
+
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       quality: 1,
     });
-  
+
     console.log('ImagePicker result:', result);
-  
-    const didCancel = result.canceled ?? result.cancelled;   
+
+    const didCancel = result.canceled ?? result.cancelled;
     if (!didCancel) {
       const uri =
         Array.isArray(result.assets) && result.assets.length > 0
@@ -198,7 +211,7 @@ export default function ReportPage() {
       setPhotoUri(uri);
     }
   }
-  
+
   // Photo from camera
   async function handleTakePhoto() {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -318,8 +331,15 @@ export default function ReportPage() {
           </TouchableWithoutFeedback>
 
         </ScrollView>
-
+        {loading && (
+          <View style={styles.loadingOverlay}>
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#0C489DFF" />
+            </View>
+          </View>
+        )}
       </KeyboardAvoidingView>
+
     </TouchableWithoutFeedback>
   );
 }
@@ -329,7 +349,28 @@ const styles = StyleSheet.create({
   sectionLabel: { fontSize: 16, fontWeight: '600', color: '#fff', marginTop: 16 },
   sectionDescription: { fontSize: 14, color: '#ccc', marginVertical: 6 },
   scrollContainer: { flex: 1, },
-  scrollContent: { paddingBottom: 100, paddingRight: 20},
+  scrollContent: { paddingBottom: 100, paddingRight: 0 },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent black
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10, // make sure it's on top
+  },
+  loadingContainer: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    elevation: 10,
+  },
+  loadingText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   textInput: {
     backgroundColor: '#1a1a1a',
     color: '#fff',
