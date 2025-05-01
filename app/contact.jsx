@@ -25,7 +25,7 @@ const styles = StyleSheet.create({// the contact pages design tools
       fontWeight: 'bold',
       color: 'white',
       justifyContent: 'center',
-      alignItems: 'center'
-  
+      alignItems: 'center',
+      fontFamily: 'RobotoCondensedReg'
     }
   })

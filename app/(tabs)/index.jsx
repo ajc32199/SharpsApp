@@ -7,7 +7,7 @@ import { useNavigationIndependentTree } from '@react-navigation/native'
 const App = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titletext}>Duluth Sharps Reporter</Text>
+      <Text style={styles.titletext}>Duluth Sharp Spot</Text>
       <Link href="/report" style={{marginHorizontal: 'auto'}} asChild>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Report</Text>
@@ -23,12 +23,6 @@ const App = () => {
           <Text style={styles.buttonText}>Contact</Text>
         </Pressable>
       </Link>
-      <Link href="/report_popup" style={{marginHorizontal: 'auto'}} asChild>
-        <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>report_popup</Text>
-        </Pressable>
-      </Link>
-
       
     </SafeAreaView>
   )
@@ -42,23 +36,24 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: 'black',
+    justifyContent: 'center'
   },
   titletext: {
-    color: 'grey',
+    color: 'white',
     borderWidth: 2,
     borderRadius: 20,
     padding: 10,
-    borderColor: 'white',
     fontSize: 20,
+    fontFamily: 'Roboto_Condensed-Bold',
     fontWeight: 'bold',
-    textAlign: 'flex-start',
-    justifyContent: 'flex-start',
+    alignSelf: 'center',
   },
   text: {
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'RobotoCondensedReg',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
     marginBottom: 10,
@@ -75,6 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'RobotoCondensedReg',
     textDecorationLine: 'underline',
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -89,7 +85,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'RobotoCondensedReg',
     textAlign: 'center',
     justifyContent: 'center',
   }

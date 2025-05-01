@@ -46,5 +46,6 @@ const styles = StyleSheet.create({ //the camera's design
       fontSize: 24,
       fontWeight: 'bold',
       color: 'white',
+      fontFamily: 'RobotoCondensedReg',
     },
   });

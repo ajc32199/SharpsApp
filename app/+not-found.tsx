@@ -28,5 +28,9 @@ const styles = StyleSheet.create({ // the design for the not found screen
   link: {
     marginTop: 15,
     paddingVertical: 15,
+    fontFamily: 'RobotoCondensedReg',
+  },
+  title: {
+    fontFamily: 'RobotoCondensedReg',
   },
 });

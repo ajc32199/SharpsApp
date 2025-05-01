@@ -14,8 +14,9 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    RobotoCondensedReg: require ('../assets/fonts/RobotoCondensedReg.ttf'),
   });
+  const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
 
   useEffect(() => {
     if (loaded) {
@@ -28,14 +29,12 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={theme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="contact" />
         <Stack.Screen name="camera" />
-        <Stack.Screen name="map" options={{ headerShown: false}}/>
         <Stack.Screen name="+not-found" />
-        <Stack.Screen name="report" />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

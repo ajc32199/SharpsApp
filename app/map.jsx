@@ -26,7 +26,6 @@ const report = () => {//Main component for reporting the location
 
   //declare an array to hold the last marker that was tapped
   const [lastMarker, setLastMarker] = useState(null);
-
   
 
 
@@ -48,22 +47,9 @@ const report = () => {//Main component for reporting the location
   }
 
   const handleReportPress = () => {
-    //check if there is a marker
-    if (marker === null) {
-      alert("Please select a location to report!");
-      return;
-    }
-
-    //if there is a marker, navigate to the report page with the coordinates
     router.push({
       pathname: '/(tabs)/report',
-    });
-    router.push({
-      pathname: '/(tabs)/report',
-      params: {
-        lat: marker.latitude,
-        long: marker.longitude,
-      }
+      params: {lat: 1, long: 2}
     });
   }
 
@@ -140,7 +126,7 @@ const styles = StyleSheet.create({//the map design tools
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
-    font: 'Arial',
+    fontFamily: 'Roboto_Condensed-Bold',
   },
   overlay:
   {
