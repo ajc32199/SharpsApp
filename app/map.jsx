@@ -9,14 +9,14 @@ import { useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 
-const INTITIAL_REGION = {
+const INTITIAL_REGION = {//The inital Duluth location
   latitude: 46.788,
   longitude: -92.081,
   latitudeDelta: 0.0922,
   longitudeDelta: 0.0421,
 }
 
-const report = () => {
+const report = () => {//Main component for reporting the location
 
   const navigation = useNavigation();
   const router = useRouter();
@@ -31,7 +31,7 @@ const report = () => {
 
 
 
-  const handleTap = (e) => {
+  const handleTap = (e) => {//Adds marker with a display for the coordinates
     //create popup alert
     alert("Use this Location?" 
     + "\nLatitude: " + e.nativeEvent.coordinate.latitude
@@ -83,7 +83,7 @@ const report = () => {
         <TouchableOpacity style={styles.cameraButton} onPress={handleReportPress}>
               <Text style={styles.buttonText}>Report</Text>
           
-        </TouchableOpacity>
+        </TouchableOpacity> 
         <TouchableOpacity style={styles.clearButton} onPress={clearMarkers}>
           <Text style={styles.buttonText}>Clear</Text>
         </TouchableOpacity>
@@ -110,7 +110,7 @@ const report = () => {
 
 export default report
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({//the map design tools
   container: {
     flex: 1,
   },

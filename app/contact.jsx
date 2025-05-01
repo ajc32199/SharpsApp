@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import { SafeAreaView } from 'expo-router'
 import React from 'react'
 
-const contact = () => {
+const contact = () => {//the contact pages function
   return (
     <View style={styles.container}>
       <Text style={styles.text}>contact</Text>
@@ -13,7 +13,7 @@ const contact = () => {
 export default contact
 
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({// the contact pages design tools
     container: {
       flex: 1,
       justifyContent: 'center',

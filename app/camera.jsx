@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Camera, CameraType } from "expo-camera";
 
-import React from "react";
+import React from "react"; //Defines a functional camera
 
 const camera = () => {
  return (
@@ -23,7 +23,7 @@ const camera = () => {
 
 export default camera;
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ //the camera's design
     container: {
       flex: 1,
       justifyContent: 'center',

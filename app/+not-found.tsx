@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-export default function NotFoundScreen() {
+export default function NotFoundScreen() { // The function that define's the not found screen
   return (
     <>
       <Stack.Screen options={{ title: 'Oops!' }} />
@@ -18,7 +18,7 @@ export default function NotFoundScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ // the design for the not found screen
   container: {
     flex: 1,
     alignItems: 'center',
