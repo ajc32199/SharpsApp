@@ -19,7 +19,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import MapView, { Marker } from 'react-native-maps';
 import { ReportService } from '@/services/ReportService';
-import Icon from 'react-native-vector-icons/Ionicons'; // You can also use FontAwesome, MaterialIcons, etc.
+import Icon from 'react-native-vector-icons/Ionicons';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 // (1) Your reverse-geocode helper (unchanged)
 async function reverseGeocode(lat, lng) {
@@ -53,6 +54,16 @@ export default function AdminManageReports() {
   const [sortBy, setSortBy] = useState("Newest"); // or "Oldest"
 
   const [mapType, setMapType] = useState('standard');
+
+  const [openStatusFor, setOpenStatusFor] = useState(null); // report.id that's currently open
+
+  const [filterStatusOpen, setFilterStatusOpen] = useState(false);
+  const [filterStatusItems] = useState([
+    { label: 'All', value: 'All' },
+    { label: 'Pending', value: 'Pending' },
+    { label: 'Cleaned Up', value: 'Cleaned Up' },
+    { label: 'Not Found', value: 'Not Found' },
+  ]);
 
 
   const [refreshing, setRefreshing] = useState(false);
@@ -208,6 +219,7 @@ export default function AdminManageReports() {
           .map(report => (
 
 
+
             <View key={report.id} style={styles.reportCard}>
               {/* report info, image, etc */}
               <Text style={styles.reportText}>
@@ -267,18 +279,42 @@ export default function AdminManageReports() {
               {editingReportId === report.id && (
                 <View style={styles.editCard}>
                   <Text style={[styles.label, { marginBottom: 4 }]}>Update Status:</Text>
-                  <Picker
-                    selectedValue={(draftStatus[report.id] ?? report.reportStatus)?.replace(/\b\w/g, c => c.toUpperCase())}
-                    onValueChange={v => handleStatusChange(report.id, v)}
-                    style={{
-                      color: colors.text,         // Apply text color to Picker
-                    }}
-                    dropdownIconColor={colors.text}
-                  >
-                    <Picker.Item label="Pending" value="Pending" />
-                    <Picker.Item label="Cleaned Up" value="Cleaned Up" />
-                    <Picker.Item label="Not Found" value="Not Found" />
-                  </Picker>
+                  <View style={{ zIndex: editingReportId === report.id ? 1000 : 1 }}>
+                    <DropDownPicker
+                      open={openStatusFor === report.id}
+                      value={draftStatus[report.id] ?? report.reportStatus}
+                      items={[
+                        { label: 'Pending', value: 'Pending' },
+                        { label: 'Cleaned Up', value: 'Cleaned Up' },
+                        { label: 'Not Found', value: 'Not Found' },
+                      ]}
+                      listMode="SCROLLVIEW"
+                      scrollViewProps={{
+                        nestedScrollEnabled: false,
+                      }}
+                      setOpen={(open) => {
+                        setOpenStatusFor(open ? report.id : null); // Only one open at a time
+                      }}
+                      setValue={(callback) => {
+                        const selected = callback(draftStatus[report.id]);
+                        handleStatusChange(report.id, selected);
+                      }}
+                      setItems={() => { }}
+                      style={{
+                        backgroundColor: colors.card,
+                        borderColor: colors.icon,
+                      }}
+                      textStyle={{
+                        color: colors.text,
+                        fontWeight: 'bold',
+                      }}
+                      dropDownContainerStyle={{
+                        backgroundColor: colors.card,
+                        borderColor: colors.icon,
+                      }}
+                    />
+                  </View>
+
                   <View style={styles.buttonRow}>
                     <TouchableOpacity style={[styles.saveBtn]} onPress={() => saveStatus(report.id)}>
                       <Icon name="checkmark-outline" size={16} color="white" />
@@ -308,16 +344,37 @@ export default function AdminManageReports() {
         <ScrollView contentContainerStyle={styles.modalContent}>
           <Text style={styles.modalTitle}>Filters</Text>
 
-          <Text style={styles.filterLabel}>Status</Text>
-          <Picker
-            selectedValue={filterStatus}
-            onValueChange={(v) => setFilterStatus(v)}
-          >
-            <Picker.Item label="All" value="All" />
-            <Picker.Item label="Pending" value="Pending" />
-            <Picker.Item label="Cleaned Up" value="Cleaned Up" />
-            <Picker.Item label="Not Found" value="Not Found" />
-          </Picker>
+          <View style={{ zIndex: 2000 }}>
+            <Text style={styles.filterLabel}>Status</Text>
+            <DropDownPicker
+              open={filterStatusOpen}
+              value={filterStatus}
+              items={filterStatusItems}
+              setOpen={setFilterStatusOpen}
+              setValue={(callback) => {
+                const selected = callback(filterStatus);
+                setFilterStatus(selected);
+              }}
+              setItems={() => { }}
+              listMode="SCROLLVIEW"
+              scrollViewProps={{
+                nestedScrollEnabled: false,
+              }}
+              style={{
+                backgroundColor: colors.card,
+                borderColor: colors.icon,
+              }}
+              dropDownContainerStyle={{
+                backgroundColor: colors.card,
+                borderColor: colors.icon,
+              }}
+              textStyle={{
+                color: colors.text,
+                fontWeight: 'bold',
+              }}
+            />
+          </View>
+
 
           <Button
             title="Clear Filters"
@@ -373,10 +430,14 @@ export default function AdminManageReports() {
               />
             )}
           </MapView>
-          <Button
-            title="Close Map"
-            onPress={() => setModalVisible(false)}
-          />
+          <View style={styles.mb_2}>
+            <Button
+              title="Close Map"
+              onPress={() => setModalVisible(false)}
+              style={styles.mb_2}
+            />
+
+          </View>
         </View>
       </Modal>
       {loading && (
@@ -392,6 +453,7 @@ export default function AdminManageReports() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  mb_2: { marginBottom: 10, paddingBottom: 10 },
   overlay: {
     zIndex: 2,
   },
@@ -495,7 +557,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#dc3545',
   },
 
-  
+
   reportCard: {
     backgroundColor: '#fff',
     padding: 12,
@@ -553,7 +615,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 16,
+    marginVertical: 16,
   },
   filterLabel: {
     fontWeight: 'bold',
