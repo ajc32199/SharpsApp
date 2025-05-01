@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   buttonBackground: {
     zIndex: 1,
     position: 'absolute',
-    height: 115,
+    height: 150,
     bottom: 0,
     left: 0,
     right: 0,
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     position: 'absolute',
     opacity: 1,
-    bottom: 55,
+    bottom: 95,
     left: 0,
     right: 0,
     marginHorizontal: 10,

@@ -12,14 +12,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ActivityIndicator
 } from 'react-native';
-
+import { ReportService } from '@/services/ReportService';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
-
-import axios from 'axios'
 
 import { useMap } from '@/utilities/mapContext';
 
@@ -31,6 +30,7 @@ export default function ReportPage() {
 
   const [locationDescription, setLocationDescription] = useState('');
   const [photoUri, setPhotoUri] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [mapRegion, setMapRegion] = useState({
     latitude: 46.788,
@@ -69,26 +69,48 @@ export default function ReportPage() {
     }
   }, [lat, lng]);
 
-  const cloudinaryUpload = async (photoUri, reportId) => {
-    const formData = new FormData();
-    formData.append('file', {
-      uri: photoUri,
-      type: 'image/jpeg', 
-      name: `report_${reportId}.jpg`,
-    });
-  
-    formData.append('upload_preset', 'SharpsAppPreset');
-  
-    const response = await axios.post(
-      'https://api.cloudinary.com/v1_1/dl2m2trsq/image/upload',
-      formData,
-      { headers: { 'Content-Type': 'multipart/form-data' } }
-    );
-  
-    return response.data.secure_url; 
+  const buildCloudinaryUrl = (cloudName, publicId, format = "png") => {
+    return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}.${format}`;
   };
 
-  async function handleSubmitReport() {
+  const cloudinaryUpload = async (photoUri, reportId) => {
+    try {
+      const cloudName = "dl2m2trsq";
+      const uploadPreset = "SharpsAppPreset";
+
+      const formData = new FormData();
+      formData.append('file', {
+        uri: photoUri,
+        type: 'image/jpeg',
+        name: `report_${reportId}.jpg`,
+      });
+
+      formData.append('upload_preset', uploadPreset);
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/upload`,
+        { method: 'POST', body: formData }
+      );
+      const data = await response.json();          // { secure_url, public_id, … }
+
+      console.log('Upload response:', data);
+
+      const cloudinaryUrl = data.secure_url
+        // Fallback if secure_url not present
+        || buildCloudinaryUrl(cloudName, data.public_id, data.format);
+
+      // Update your local state with the final Cloudinary URL
+      setPhotoUri(cloudinaryUrl);
+
+      console.log('Cloudinary URL:', data.secure_url);
+      return cloudinaryUrl;
+    } catch (err) {
+      console.warn('Upload failed:', err);
+    }
+  };
+
+  const handleSubmitReport = async () => {
+    setLoading(true);
     try {
       if (!location) {
         Alert.alert('Ack!', 'Please select a location, then try again.');
@@ -105,44 +127,35 @@ export default function ReportPage() {
         description: locationDescription || ''
       };
 
-      console.log('Sending report payload:', payload);
+      const report = await ReportService.createReport(payload);
 
-      const response = await axios.post(
-              'https://sharpsappbackend.onrender.com/reports',
-              payload,
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                  
-                },
-              }
-            );
+      console.log('Server created report:', report);
 
+      const { id: reportId } = report;
 
-      if (!response.status === 201) {
-        throw new Error(`Request failed with status ${response.status}`);
-      }
+      const uploadedPhotoUrl = await cloudinaryUpload(photoUri, reportId);
 
-      console.log('Server response:', response.data);
-      const { id: reportId } = response.data;
+      console.log('Uploaded photo URL:', uploadedPhotoUrl);
 
+      const updatedReport = await ReportService.updateReportPhotoUrl(reportId, uploadedPhotoUrl);
 
-      cloudinaryUpload(photoUri, reportId);
+      console.log('Server updated report with photo:', updatedReport);
 
       Alert.alert('Success', 'Your report was submitted successfully!');
-
-      router.push('/(tabs)')
+      router.push('/(tabs)');
 
     } catch (error) {
-      if( error.response ) {
+      if (error.response) {
+        console.log('Server responded with:', error.response.status, error.response.data);
         console.error('Server responded with:', error.response.status, error.response.data);
-
       } else {
-        console.error('Error submitting report:', error.response);
+        console.log('Error submitting report:', error);
+        console.error('Error submitting report:', error);
       }
       Alert.alert('Error', 'Could not submit your report.');
     }
-  }
+    setLoading(false);
+  };
 
   async function handleUseCurrentLocation() {
     try {
@@ -167,7 +180,6 @@ export default function ReportPage() {
     }
   }
 
-  // "Pick on Map"
   function handleSelectOnMap() {
     router.push('/(tabs)/report/map');
   }
@@ -175,16 +187,28 @@ export default function ReportPage() {
   async function handlePickPhoto() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission Required', 'Need camera roll permission to select photos.');
+      Alert.alert(
+        'Permission Required',
+        'We need access to your photos to let you pick one.'
+      );
       return;
     }
+
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       quality: 1,
     });
-    if (!result.canceled) {
-      setPhotoUri(result.assets[0].uri);
+
+    console.log('ImagePicker result:', result);
+
+    const didCancel = result.canceled ?? result.cancelled;
+    if (!didCancel) {
+      const uri =
+        Array.isArray(result.assets) && result.assets.length > 0
+          ? result.assets[0].uri
+          : result.uri;
+      setPhotoUri(uri);
     }
   }
 
@@ -261,15 +285,27 @@ export default function ReportPage() {
               <Text style={styles.sectionLabel}>Photo (optional)</Text>
               <Text style={styles.sectionDescription}>
                 {!photoUri ? (
-                  "Take a quick photo or choose one from your library:" 
+                  "Take a quick photo or choose one from your library:"
                 ) : (
                   "Very nice!"
                 )
                 }
-                
-              </Text>
-              {photoUri && <Image source={{ uri: photoUri }} style={styles.photoPreview} />}
 
+              </Text>
+              {photoUri && (
+                <View style={styles.photoContainer}>
+                  <Image
+                    source={{ uri: photoUri }}
+                    style={styles.photoPreview}
+                  />
+                  <TouchableOpacity
+                    style={styles.clearButton}
+                    onPress={() => setPhotoUri(null)}
+                  >
+                    <Text style={styles.clearButtonText}>✕</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
               <View style={styles.buttonRow}>
                 <TouchableOpacity style={styles.choiceButton} onPress={handlePickPhoto}>
                   <Text style={styles.choiceText}>Select from Gallery</Text>
@@ -279,7 +315,7 @@ export default function ReportPage() {
                 </TouchableOpacity>
               </View>
 
-              
+
 
 
               {/* Submit Button */}
@@ -293,18 +329,48 @@ export default function ReportPage() {
             </View>
 
           </TouchableWithoutFeedback>
-          
-        </ScrollView>
 
+        </ScrollView>
+        {loading && (
+          <View style={styles.loadingOverlay}>
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#0C489DFF" />
+            </View>
+          </View>
+        )}
       </KeyboardAvoidingView>
+
     </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 16, paddingTop: 10, backgroundColor: '#000' },
-  sectionLabel: { fontSize: 16, fontWeight: '600', color: '#fff', marginTop: 16, fontFamily: 'Roboto_Condensed-Bold' },
-  sectionDescription: { fontSize: 16, color: '#ccc', marginVertical: 6, fontFamily: 'RobotoCondensedReg' },
+  sectionLabel: { fontSize: 16, fontWeight: '600', color: '#fff', marginTop: 16 },
+  sectionDescription: { fontSize: 14, color: '#ccc', marginVertical: 6 },
+  scrollContainer: { flex: 1, },
+  scrollContent: { paddingBottom: 100, paddingRight: 0 },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent black
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10, // make sure it's on top
+  },
+  loadingContainer: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    elevation: 10,
+  },
+  loadingText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
   textInput: {
     backgroundColor: '#1a1a1a',
     color: '#fff',
@@ -320,7 +386,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     marginTop: 8,
-    marginBottom: 10,
   },
   mapPreview: { width: '100%', height: '100%' },
   buttonRow: { flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 },
@@ -332,13 +397,33 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
-  choiceText: { color: '#fff', fontWeight: '600', fontFamily: 'Roboto_Condensed-Bold' },
+  choiceText: { color: '#fff', fontWeight: '600' },
+  photoContainer: {
+    position: 'relative',
+    alignSelf: 'stretch',
+    marginTop: 8,
+  },
   photoPreview: {
     width: '100%',
     height: 200,
     borderRadius: 10,
-    marginTop: 10,
     resizeMode: 'cover',
+  },
+  clearButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  clearButtonText: {
+    color: '#fff',
+    fontSize: 12,
+    lineHeight: 12,
   },
   submitButton: {
     backgroundColor: 'orange',
