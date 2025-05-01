@@ -1,8 +1,13 @@
 import React from 'react'
-import { SafeAreaView, View, Text, StyleSheet, Pressable } from 'react-native'
+import { SafeAreaView, View, Text, StyleSheet, Pressable, ImageBackground } from 'react-native'
 import { Link } from 'expo-router'
 
 const App = () => (
+  <ImageBackground
+    source={require('../../assets/images/DI2.jpg')}
+    style={styles.background}
+    imageStyle={styles.backgroundImage}
+    >
   <SafeAreaView style={styles.container}>
     <View style={styles.header}>
       <Text style={styles.headerText}>Duluth Sharp Spot</Text>
@@ -11,7 +16,7 @@ const App = () => (
     <View style={styles.buttonContainer}>
       <Link href="/report" asChild>
         <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>Report</Text>
+          <Text style={styles.buttonText}>Report A Sharp</Text>
         </Pressable>
       </Link>
 
@@ -28,14 +33,22 @@ const App = () => (
       </Link>
     </View>
   </SafeAreaView>
+  </ImageBackground>
 )
 
 export default App
 
 const styles = StyleSheet.create({
+  background:{
+    flex: 1,
+  },
+  backgroundImage: {
+    opacity: 0.3,
+    resizeMode: 'cover',
+  },
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: 'transparent',
   },
   header: {
     backgroundColor: 'grey',
@@ -50,7 +63,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 2,
     justifyContent: 'flex-start', // Adjust buttons to start from the top
-    marginTop: 150, // Add margin to create space from the top
+    marginTop: 200, // Add margin to create space from the top
   },
   button: {
     backgroundColor: 'grey',
