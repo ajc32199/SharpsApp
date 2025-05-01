@@ -1,92 +1,70 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native'
-import { SafeAreaView } from 'react-native'
-import { Link } from 'expo-router'
 import React from 'react'
-import { useNavigationIndependentTree } from '@react-navigation/native'
+import { SafeAreaView, View, Text, StyleSheet, Pressable } from 'react-native'
+import { Link } from 'expo-router'
 
-const App = () => {
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.titletext}>Duluth Sharp Spot</Text>
-      <Link href="/report" style={{marginHorizontal: 'auto'}} asChild>
+const App = () => (
+  <SafeAreaView style={styles.container}>
+    <View style={styles.header}>
+      <Text style={styles.headerText}>Duluth Sharp Spot</Text>
+    </View>
+
+    <View style={styles.buttonContainer}>
+      <Link href="/report" asChild>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Report</Text>
         </Pressable>
       </Link>
-      <Link href="/info" style={{marginHorizontal: 'auto'}} asChild>
+
+      <Link href="/info" asChild>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Sharps Information</Text>
         </Pressable>
       </Link>
-      <Link href="/contact" style={{marginHorizontal: 'auto'}} asChild>
+
+      <Link href="/contact" asChild>
         <Pressable style={styles.button}>
           <Text style={styles.buttonText}>Contact</Text>
         </Pressable>
       </Link>
-      
-    </SafeAreaView>
-  )
-}
+    </View>
+  </SafeAreaView>
+)
 
 export default App
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
     backgroundColor: 'black',
-    justifyContent: 'center'
   },
-  titletext: {
+  header: {
+    backgroundColor: 'grey',
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  headerText: {
     color: 'white',
-    borderWidth: 2,
-    borderRadius: 20,
-    padding: 10,
-    fontSize: 20,
+    fontSize: 22,
     fontFamily: 'Roboto_Condensed-Bold',
-    fontWeight: 'bold',
-    alignSelf: 'center',
   },
-  text: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontFamily: 'RobotoCondensedReg',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    marginBottom: 10,
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-  link: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontFamily: 'RobotoCondensedReg',
-    textDecorationLine: 'underline',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    padding: 10,
+  buttonContainer: {
+    flex: 2,
+    justifyContent: 'flex-start', // Adjust buttons to start from the top
+    marginTop: 150, // Add margin to create space from the top
   },
   button: {
+    backgroundColor: 'grey',
+    width: 240,
     height: 60,
-    borderRadius: 20,
+    borderRadius: 12,
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    marginVertical: 8,
+    alignSelf: 'center',
   },
   buttonText: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'RobotoCondensedReg',
     textAlign: 'center',
-    justifyContent: 'center',
-  }
+  },
 })
